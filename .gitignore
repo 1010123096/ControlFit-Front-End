@@ -1,0 +1,45 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+*.tmp
+*.vs/
+
+# Coverage reports
+CoverageReport/
+CoverageReport2/
+CoverageFinal/
+coverage.opencover.xml
+cobertura.xml
+coverage/
+
+# SonarQube scanner output
+.sonarqube/
+
+# NuGet
+packages/
+*.nupkg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*~
+
+# Node / Angular
+node_modules/
+.angular/
+dist/
+*.js.map
+
+# Playwright
+test-results/
+playwright-report/
+
+
+# Debug / screenshots
+debug-*.png
+
