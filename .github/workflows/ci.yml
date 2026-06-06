@@ -184,7 +184,7 @@ jobs:
               <p>End-to-end test report with videos</p>
               <span class="status found">View</span>
             </a>
-            <a class="card" href="coverage/" target="_blank">
+            <a class="card" href="coverage/controlfit-front/" target="_blank">
               <h2>Unit Test Coverage</h2>
               <p>Istanbul HTML coverage report</p>
               <span class="status found">View</span>
