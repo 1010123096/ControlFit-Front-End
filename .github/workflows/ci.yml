@@ -33,6 +33,26 @@ jobs:
       - name: Run unit tests
         run: npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
 
+      - name: Coverage summary
+        if: always()
+        run: |
+          COVERAGE_FILE=$(find coverage -name 'cobertura-coverage.xml' | head -1)
+          if [ -f "$COVERAGE_FILE" ]; then
+            LINE_RATE=$(grep -o 'line-rate="[^"]*"' "$COVERAGE_FILE" | head -1 | grep -o '[0-9.]*')
+            BRANCH_RATE=$(grep -o 'branch-rate="[^"]*"' "$COVERAGE_FILE" | head -1 | grep -o '[0-9.]*')
+            LINES_COVERED=$(grep -o 'lines-covered="[^"]*"' "$COVERAGE_FILE" | head -1 | grep -o '[0-9]*')
+            LINES_VALID=$(grep -o 'lines-valid="[^"]*"' "$COVERAGE_FILE" | head -1 | grep -o '[0-9]*')
+            LINE_PCT=$(echo "scale=1; $LINE_RATE * 100" | bc)
+            BRANCH_PCT=$(echo "scale=1; $BRANCH_RATE * 100" | bc)
+            cat <<EOF >> $GITHUB_STEP_SUMMARY
+        ## Frontend Code Coverage
+        | Metric | Value |
+        |--------|-------|
+        | Lines | **${LINE_PCT}%** ($LINES_COVERED/$LINES_VALID) |
+        | Branches | **${BRANCH_PCT}%** |
+        EOF
+          fi
+
       - name: Install Playwright browsers
         run: npx playwright install chromium
 
