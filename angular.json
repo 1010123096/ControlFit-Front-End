@@ -83,6 +83,13 @@
             "styles": ["src/styles.css"],
             "scripts": [],
             "codeCoverage": true,
+            "coverageReporter": {
+              "dir": "coverage/controlfit-front",
+              "reporters": [
+                { "type": "html" },
+                { "type": "lcov" }
+              ]
+            },
             "codeCoverageExclude": [
               "src/environments/**",
               "src/main.ts",
