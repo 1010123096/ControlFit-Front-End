@@ -9,7 +9,8 @@
     "test": "ng test",
     "test:headless": "ng test --watch=false --browsers=ChromeHeadless",
     "playwright": "npx playwright test",
-    "playwright:ui": "npx playwright test --ui"
+    "playwright:ui": "npx playwright test --ui",
+    "sonar": "sonar-scanner"
   },
   "private": true,
   "dependencies": {
