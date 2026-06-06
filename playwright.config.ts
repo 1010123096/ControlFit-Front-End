@@ -10,6 +10,7 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:4200',
     trace: 'on-first-retry',
+    video: process.env.CI ? 'on' : 'off',
     actionTimeout: 15000,
     navigationTimeout: 20000,
   },

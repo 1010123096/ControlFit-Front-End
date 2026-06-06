@@ -56,7 +56,7 @@ jobs:
   security:
     name: Security Scan (ZAP)
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
 
     steps:
       - uses: actions/checkout@v4
