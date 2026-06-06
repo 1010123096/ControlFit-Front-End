@@ -16,7 +16,7 @@ test.describe('Gym Admin Dashboard', () => {
   });
 
   test('should show loading state', async ({ page, dashboardPage }) => {
-    await page.route('**/api/miembros/obtenerTodos', async () => {});
+    await page.route('**/api/dashboard/gym-admin', async () => {});
     await dashboardPage.navigateTo();
     await expect(dashboardPage.loadingSpinner).toBeVisible();
   });

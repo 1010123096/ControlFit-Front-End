@@ -16,6 +16,14 @@ coverage.opencover.xml
 cobertura.xml
 coverage/
 
+# Playwright E2E reports
+playwright-report/
+test-results/
+
+# Stryker mutation test output
+.stryker-tmp/
+reports/mutation/
+
 # SonarQube scanner output
 .sonarqube/
 

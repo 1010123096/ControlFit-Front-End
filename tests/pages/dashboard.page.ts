@@ -10,7 +10,7 @@ export class DashboardPage {
     this.page = page;
     this.loadingSpinner = page.locator('app-loading-spinner');
     this.errorState = page.locator('app-error-state');
-    this.heading = page.getByRole('heading', { name: 'Panel de Administración del Gimnasio' });
+    this.heading = page.getByRole('heading', { name: 'Panel de Administración' });
   }
 
   async navigateTo(): Promise<void> {

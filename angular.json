@@ -33,6 +33,7 @@
             ],
             "polyfills": ["zone.js"],
             "styles": [
+              "src/theme.scss",
               "src/styles.css"
             ],
             "scripts": []
@@ -78,12 +79,23 @@
           "options": {
             "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
-            "assets": ["public"],
+            "assets": [],
             "styles": ["src/styles.css"],
-            "scripts": []
+            "scripts": [],
+            "codeCoverage": true,
+            "codeCoverageExclude": [
+              "src/environments/**",
+              "src/main.ts",
+              "src/app/features/**/routes.ts",
+              "src/app/app.config.ts",
+              "src/app/app.routes.ts"
+            ]
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "ba8173bd-d62e-4887-a1de-580f47c5089f"
   }
 }

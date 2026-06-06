@@ -1,0 +1,20 @@
+@use '@angular/material' as mat;
+
+html {
+  color-scheme: light;
+
+  --mat-sys-primary: #3f51b5;
+  --mat-sys-secondary: #7c4dff;
+  --mat-sys-tertiary: #4caf50;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-on-secondary: #ffffff;
+  --mat-sys-on-tertiary: #ffffff;
+  --mat-sys-background: #ffffff;
+  --mat-sys-on-background: #1e293b;
+  --mat-sys-surface: #ffffff;
+  --mat-sys-on-surface: #1e293b;
+  --mat-sys-outline: #e2e8f0;
+  --mat-sys-outline-variant: #cbd5e1;
+  --mat-sys-error: #f44336;
+  --mat-sys-on-error: #ffffff;
+}

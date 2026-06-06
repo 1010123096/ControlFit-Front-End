@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { Router, UrlTree } from '@angular/router';
 import { AuthGuard } from './auth.guard';
 import { TokenService } from '../services/token.service';
 import { JwtDecodedService } from '../services/jwt-decoded.service';

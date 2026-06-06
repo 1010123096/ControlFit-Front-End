@@ -1,4 +1,12 @@
-export const DASHBOARD_STATS = [
-  { id: 1, nombre: 'Juan Pérez', correo: 'juan@test.com', telefono: '123456789' },
-  { id: 2, nombre: 'María López', correo: 'maria@test.com', telefono: '987654321' },
-];
+export const DASHBOARD_STATS = {
+  totalMiembros: 10,
+  miembrosActivos: 8,
+  membresiasVencidas: 2,
+  asistenciasHoy: 5,
+};
+
+export const SUPER_ADMIN_DASHBOARD_STATS = {
+  totalGimnasios: 3,
+  totalMiembros: 50,
+  totalAdministradores: 5,
+};

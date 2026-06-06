@@ -20,6 +20,9 @@ import { Membresia } from '../../models/membresia.model';
         <mat-form-field appearance="outline" class="full-width"><mat-label>Nombre</mat-label><input matInput formControlName="nombre"></mat-form-field>
         <mat-form-field appearance="outline" class="full-width"><mat-label>Duración (días)</mat-label><input matInput type="number" formControlName="duracionDias"></mat-form-field>
         <mat-form-field appearance="outline" class="full-width"><mat-label>Precio</mat-label><input matInput type="number" formControlName="precio"></mat-form-field>
+        <mat-form-field appearance="outline" class="full-width"><mat-label>Ingresos máximos por día</mat-label><input matInput type="number" formControlName="maximoIngresosPorDia"></mat-form-field>
+        <mat-form-field appearance="outline" class="full-width"><mat-label>Ingresos máximos por semana</mat-label><input matInput type="number" formControlName="maximoIngresosPorSemana"></mat-form-field>
+        <mat-form-field appearance="outline" class="full-width"><mat-label>Ingresos máximos totales</mat-label><input matInput type="number" formControlName="maximoIngresosTotales"></mat-form-field>
       </form>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
@@ -37,12 +40,16 @@ export class MembresiaDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<MembresiaDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Membresia | null
   ) {
-    this.form = this.fb.group({ nombre: ['', Validators.required], duracionDias: [0, Validators.required], precio: [0, Validators.required] });
+    this.form = this.fb.group({ nombre: ['', Validators.required], duracionDias: [0, Validators.required], precio: [0, Validators.required], maximoIngresosPorDia: [0], maximoIngresosPorSemana: [0], maximoIngresosTotales: [0] });
   }
   ngOnInit(): void { if (this.data) this.form.patchValue({ ...this.data }); }
   guardar(): void {
     if (this.form.invalid) return;
-    if (this.data) { this.service.actualizar(this.data.id, this.form.getRawValue() as Partial<Membresia>).subscribe({ next: () => this.dialogRef.close(true) }); }
-    else { this.service.crear({ ...this.form.getRawValue(), gimnasioId: this.jwtDecodedService.getGimnasioId() } as any).subscribe({ next: () => this.dialogRef.close(true) }); }
+    if (this.data) {
+      const payload = { ...this.data, ...this.form.getRawValue() } as any;
+      this.service.actualizar(this.data.id, payload).subscribe({ next: () => this.dialogRef.close(true) });
+    } else {
+      this.service.crear({ ...this.form.getRawValue(), gimnasioId: this.jwtDecodedService.getGimnasioId() } as any).subscribe({ next: () => this.dialogRef.close(true) });
+    }
   }
 }

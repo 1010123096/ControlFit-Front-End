@@ -1,0 +1,100 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '20.x'
+
+jobs:
+  build-test:
+    name: Build, Unit Tests & E2E
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build -- --configuration production
+
+      - name: Run unit tests
+        run: npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+
+      - name: Run E2E tests
+        run: npx playwright test --reporter=html
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frontend-coverage
+          path: coverage/
+
+  security:
+    name: Security Scan (ZAP)
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install & Build
+        run: |
+          npm ci
+          npm run build -- --configuration production
+
+      - name: Serve frontend
+        run: |
+          npx http-server dist/controlfit-front -p 4200 --cors -s &
+          echo "Waiting for frontend..."
+          for i in $(seq 1 15); do
+            if curl -s -o /dev/null -w "%{http_code}" http://localhost:4200 | grep -q "200"; then
+              echo "Frontend ready"
+              break
+            fi
+            echo "Waiting... ($i/15)"
+            sleep 2
+          done
+
+      - name: OWASP ZAP Full Scan
+        uses: zaproxy/action-full-scan@v0.12.0
+        with:
+          target: 'http://localhost:4200'
+          fail_action: false
+          allow_issue_writing: false
+          cmd_options: '-a -J zap-report.json'
+
+      - name: Upload ZAP report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zap-security-report
+          path: zap-report.json

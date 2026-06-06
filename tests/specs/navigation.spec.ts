@@ -54,10 +54,11 @@ test.describe('Navigation', () => {
 
   test('should logout successfully', async ({ page }) => {
     await setAuthToken(page, GYM_ADMIN_TOKEN);
-    await page.route('**/api/miembros/obtenerTodos', async (route) => {
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ totalMiembros: 0, miembrosActivos: 0, membresiasVencidas: 0, asistenciasHoy: 0 }) });
+    await page.route('**/api/dashboard/gym-admin', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ message: 'ok', data: { totalMiembros: 0, miembrosActivos: 0, membresiasVencidas: 0, asistenciasHoy: 0 } }) });
     });
     await page.goto('/gym-admin/dashboard');
+    await page.locator('.user-btn').click();
     await page.locator('button').filter({ hasText: 'Cerrar sesión' }).click();
     await expect(page.locator('.login-wrapper')).toBeVisible();
   });

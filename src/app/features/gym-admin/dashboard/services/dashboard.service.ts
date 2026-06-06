@@ -6,11 +6,11 @@ import { DashboardStats } from '../models/dashboard.model';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = `${environment.apiUrl}/dashboard`;
 
   constructor(private http: HttpClient) {}
 
   getStats(): Observable<DashboardStats> {
-    return this.http.get<DashboardStats>(`${this.apiUrl}/miembros/obtenerTodos`);
+    return this.http.get<DashboardStats>(`${this.apiUrl}/gym-admin`);
   }
 }

@@ -5,42 +5,69 @@
   min-height: 100vh;
   padding: 24px;
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1a237e 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 60%);
+  animation: bgShift 15s ease-in-out infinite alternate;
+}
+
+@keyframes bgShift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-10%, -10%); }
 }
 
 .login-card {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   background: #ffffff;
-  border-radius: 16px;
-  padding: 40px 36px;
+  border-radius: 20px;
+  padding: 44px 40px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .login-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 36px;
 }
 
 .login-logo {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   background: linear-gradient(135deg, #1a237e, #3949ab);
-  border-radius: 14px;
+  border-radius: 18px;
   color: white;
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 700;
   letter-spacing: -0.5px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(26, 35, 126, 0.3);
 }
 
 .login-title {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
   color: #0f172a;
-  margin: 0 0 6px;
+  margin: 0 0 8px;
 }
 
 .login-subtitle {
@@ -54,16 +81,21 @@
 }
 
 .submit-btn {
-  height: 48px;
+  height: 50px;
   font-size: 15px;
   font-weight: 600;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
   margin-top: 8px;
+  border-radius: 10px !important;
+}
+
+.submit-btn mat-spinner {
+  margin: 0 auto;
 }
 
 .login-footer {
   text-align: center;
-  margin-top: 24px;
+  margin-top: 28px;
   font-size: 13px;
   color: #94a3b8;
 }

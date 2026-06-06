@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "packageManager": "npm",
+  "plugins": ["@stryker-mutator/karma-runner", "@stryker-mutator/typescript-checker"],
+  "reporters": ["html", "json", "progress", "clear-text"],
+  "testRunner": "karma",
+  "coverageAnalysis": "perTest",
+  "mutate": [
+    "src/app/**/*.ts",
+    "!src/app/**/*.spec.ts",
+    "!src/app/**/*.d.ts",
+    "!src/app/features/**/routes.ts",
+    "!src/app/features/**/*.model.ts",
+    "!src/app/app.routes.ts",
+    "!src/app/app.config.ts",
+    "!src/environments/**"
+  ],
+  "tsconfigFile": "tsconfig.json",
+  "thresholds": {
+    "break": 60,
+    "high": 80,
+    "low": 60
+  },
+  "typeScriptChecker": true,
+  "temporaryDirectory": ".stryker-tmp",
+  "timeoutMS": 60000
+}

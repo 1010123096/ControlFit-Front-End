@@ -21,10 +21,14 @@ export class AsignacionesPage {
     await this.nuevaButton.click();
   }
 
-  async fillAsignacionForm(miembroId: string, membresiaId: string): Promise<void> {
+  async fillAsignacionForm(miembroNombre: string, membresiaNombre: string): Promise<void> {
     const dialog = this.page.getByRole('dialog');
-    await dialog.locator('[formControlName="miembroId"]').fill(miembroId);
-    await dialog.locator('[formControlName="membresiaId"]').fill(membresiaId);
+    await dialog.locator('[formControlName="miembroCtrl"]').fill(miembroNombre);
+    await this.page.waitForTimeout(500);
+    await this.page.locator('mat-option').first().click();
+    await dialog.locator('[formControlName="membresiaCtrl"]').fill(membresiaNombre);
+    await this.page.waitForTimeout(500);
+    await this.page.locator('mat-option').first().click();
   }
 
   async guardarDialog(): Promise<void> {
