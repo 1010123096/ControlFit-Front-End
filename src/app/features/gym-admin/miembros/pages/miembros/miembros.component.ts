@@ -17,6 +17,7 @@ import { ErrorStateComponent } from '../../../../../shared/components/error-stat
 import { MiembroService } from '../../services/miembro.service';
 import { Miembro } from '../../models/miembro.model';
 import { MiembroDialogComponent } from '../../components/miembro-dialog/miembro-dialog.component';
+import { ConfirmDialogComponent } from '../../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-miembros',
@@ -25,7 +26,7 @@ import { MiembroDialogComponent } from '../../components/miembro-dialog/miembro-
     CommonModule, FormsModule, MatTableModule, MatButtonModule, MatIconModule,
     MatDialogModule, MatSnackBarModule, MatFormFieldModule, MatInputModule,
     MatPaginatorModule, MatSortModule, MatTooltipModule,
-    LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent,
+    LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent, ConfirmDialogComponent,
   ],
   template: `
     <div class="page-header">
@@ -113,18 +114,20 @@ export class MiembrosComponent implements OnInit {
   }
 
   abrirCrearDialog(): void {
-    const ref = this.dialog.open(MiembroDialogComponent, { width: '500px' });
+    const ref = this.dialog.open(MiembroDialogComponent, { panelClass: 'dialog-responsive', autoFocus: 'first-tabbable' });
     ref.afterClosed().subscribe((result) => { if (result) this.cargarMiembros(); });
   }
 
   abrirEditarDialog(miembro: Miembro): void {
-    const ref = this.dialog.open(MiembroDialogComponent, { width: '500px', data: miembro });
+    const ref = this.dialog.open(MiembroDialogComponent, { panelClass: 'dialog-responsive', autoFocus: 'first-tabbable', data: miembro });
     ref.afterClosed().subscribe((result) => { if (result) this.cargarMiembros(); });
   }
 
   eliminarMiembro(miembro: Miembro): void {
-    if (confirm(`¿Está seguro de eliminar a ${miembro.nombreCompleto}?`)) {
-      this.miembroService.eliminar(miembro.id).subscribe({ next: () => this.cargarMiembros() });
-    }
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      panelClass: 'dialog-responsive',
+      data: { title: 'Eliminar miembro', message: `¿Está seguro de eliminar a ${miembro.nombreCompleto}? Esta acción no se puede deshacer.`, confirmText: 'Eliminar', type: 'danger' }
+    });
+    ref.afterClosed().subscribe((confirmed) => { if (confirmed) this.miembroService.eliminar(miembro.id).subscribe({ next: () => this.cargarMiembros() }); });
   }
 }

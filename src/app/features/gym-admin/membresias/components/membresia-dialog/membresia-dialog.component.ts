@@ -16,13 +16,13 @@ import { Membresia } from '../../models/membresia.model';
   template: `
     <h2 mat-dialog-title>{{ data ? 'Editar Membresía' : 'Nueva Membresía' }}</h2>
     <mat-dialog-content>
-      <form [formGroup]="form">
-        <mat-form-field appearance="outline" class="full-width"><mat-label>Nombre</mat-label><input matInput formControlName="nombre"></mat-form-field>
-        <mat-form-field appearance="outline" class="full-width"><mat-label>Duración (días)</mat-label><input matInput type="number" formControlName="duracionDias"></mat-form-field>
-        <mat-form-field appearance="outline" class="full-width"><mat-label>Precio</mat-label><input matInput type="number" formControlName="precio"></mat-form-field>
-        <mat-form-field appearance="outline" class="full-width"><mat-label>Ingresos máximos por día</mat-label><input matInput type="number" formControlName="maximoIngresosPorDia"></mat-form-field>
-        <mat-form-field appearance="outline" class="full-width"><mat-label>Ingresos máximos por semana</mat-label><input matInput type="number" formControlName="maximoIngresosPorSemana"></mat-form-field>
-        <mat-form-field appearance="outline" class="full-width"><mat-label>Ingresos máximos totales</mat-label><input matInput type="number" formControlName="maximoIngresosTotales"></mat-form-field>
+      <form [formGroup]="form" class="form-grid">
+        <mat-form-field appearance="outline" class="dialog-field span-2"><mat-label>Nombre *</mat-label><input matInput formControlName="nombre" cdkFocusInitial></mat-form-field>
+        <mat-form-field appearance="outline" class="dialog-field"><mat-label>Duración (días) *</mat-label><input matInput type="number" formControlName="duracionDias"></mat-form-field>
+        <mat-form-field appearance="outline" class="dialog-field"><mat-label>Precio *</mat-label><input matInput type="number" formControlName="precio"></mat-form-field>
+        <mat-form-field appearance="outline" class="dialog-field"><mat-label>Ingresos máx. por día</mat-label><input matInput type="number" formControlName="maximoIngresosPorDia"></mat-form-field>
+        <mat-form-field appearance="outline" class="dialog-field"><mat-label>Ingresos máx. por semana</mat-label><input matInput type="number" formControlName="maximoIngresosPorSemana"></mat-form-field>
+        <mat-form-field appearance="outline" class="dialog-field span-2"><mat-label>Ingresos máximos totales</mat-label><input matInput type="number" formControlName="maximoIngresosTotales"></mat-form-field>
       </form>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
@@ -30,7 +30,7 @@ import { Membresia } from '../../models/membresia.model';
       <button mat-raised-button color="primary" (click)="guardar()" [disabled]="form.invalid">Guardar</button>
     </mat-dialog-actions>
   `,
-  styles: [`.full-width { width: 100%; margin-bottom: 12px; }`]
+  styles: ['']
 })
 export class MembresiaDialogComponent implements OnInit {
   form;

@@ -17,6 +17,7 @@ import { ErrorStateComponent } from '../../../../../shared/components/error-stat
 import { MembresiaService } from '../../services/membresia.service';
 import { Membresia } from '../../models/membresia.model';
 import { MembresiaDialogComponent } from '../../components/membresia-dialog/membresia-dialog.component';
+import { ConfirmDialogComponent } from '../../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-membresias',
@@ -25,7 +26,7 @@ import { MembresiaDialogComponent } from '../../components/membresia-dialog/memb
     CommonModule, FormsModule, MatTableModule, MatButtonModule, MatIconModule,
     MatDialogModule, MatSlideToggleModule, MatFormFieldModule, MatInputModule,
     MatPaginatorModule, MatSortModule, MatTooltipModule,
-    LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent,
+    LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent, ConfirmDialogComponent,
   ],
   template: `
     <div class="page-header">
@@ -87,8 +88,14 @@ export class MembresiasComponent implements OnInit {
   applyFilter(event: Event): void {
     this.dataSource.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
   }
-  abrirCrearDialog(): void { const ref = this.dialog.open(MembresiaDialogComponent, { width: '500px' }); ref.afterClosed().subscribe((r) => { if (r) this.cargarMembresias(); }); }
-  abrirEditarDialog(m: Membresia): void { const ref = this.dialog.open(MembresiaDialogComponent, { width: '500px', data: m }); ref.afterClosed().subscribe((r) => { if (r) this.cargarMembresias(); }); }
+  abrirCrearDialog(): void { const ref = this.dialog.open(MembresiaDialogComponent, { panelClass: 'dialog-responsive', autoFocus: 'first-tabbable' }); ref.afterClosed().subscribe((r) => { if (r) this.cargarMembresias(); }); }
+  abrirEditarDialog(m: Membresia): void { const ref = this.dialog.open(MembresiaDialogComponent, { panelClass: 'dialog-responsive', autoFocus: 'first-tabbable', data: m }); ref.afterClosed().subscribe((r) => { if (r) this.cargarMembresias(); }); }
   toggleEstado(m: Membresia): void { this.service.actualizar(m.id, { ...m, estado: !m.estado }).subscribe({ next: () => this.cargarMembresias() }); }
-  eliminar(m: Membresia): void { if (confirm(`¿Eliminar membresía ${m.nombre}?`)) { this.service.eliminar(m.id).subscribe({ next: () => this.cargarMembresias() }); } }
+  eliminar(m: Membresia): void {
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      panelClass: 'dialog-responsive',
+      data: { title: 'Eliminar membresía', message: `¿Eliminar membresía ${m.nombre}? Esta acción no se puede deshacer.`, confirmText: 'Eliminar', type: 'danger' }
+    });
+    ref.afterClosed().subscribe((confirmed) => { if (confirmed) this.service.eliminar(m.id).subscribe({ next: () => this.cargarMembresias() }); });
+  }
 }

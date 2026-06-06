@@ -7,13 +7,14 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 import { TokenService } from '../../../core/services/token.service';
 import { JwtDecodedService } from '../../../core/services/jwt-decoded.service';
 
 @Component({
   selector: 'app-super-admin-layout',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatToolbarModule, MatSidenavModule, MatListModule, MatIconModule, MatButtonModule, MatMenuModule],
+  imports: [CommonModule, RouterModule, MatToolbarModule, MatSidenavModule, MatListModule, MatIconModule, MatButtonModule, MatMenuModule, MatDividerModule],
   template: `
     <mat-toolbar color="primary" class="toolbar">
       <button mat-icon-button (click)="sidenav.toggle()" class="menu-btn">
@@ -25,11 +26,11 @@ import { JwtDecodedService } from '../../../core/services/jwt-decoded.service';
       </span>
       <span class="toolbar-subtitle">Super Administrador</span>
       <span class="spacer"></span>
-      <button mat-icon-button [matMenuTriggerFor]="menu" class="user-btn">
+      <button mat-icon-button [matMenuTriggerFor]="menu" class="user-menu-btn" aria-label="Menú de usuario">
         <mat-icon>account_circle</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <div class="user-info-header" mat-menu-item disabled>
+        <div class="user-menu-header">
           <div class="user-avatar">{{ inicial }}</div>
           <div>
             <div class="user-name">Super Admin</div>
@@ -37,7 +38,7 @@ import { JwtDecodedService } from '../../../core/services/jwt-decoded.service';
           </div>
         </div>
         <mat-divider></mat-divider>
-        <button mat-menu-item (click)="logout()">
+        <button mat-menu-item (click)="logout()" class="logout-menu-item">
           <mat-icon>logout</mat-icon>
           <span>Cerrar sesión</span>
         </button>

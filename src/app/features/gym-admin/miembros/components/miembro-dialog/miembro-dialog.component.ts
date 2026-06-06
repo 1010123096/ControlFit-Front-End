@@ -17,19 +17,19 @@ import { Miembro, CrearMiembro, ActualizarMiembro } from '../../models/miembro.m
     <h2 mat-dialog-title>{{ data ? 'Editar Miembro' : 'Nuevo Miembro' }}</h2>
     <mat-dialog-content>
       <form [formGroup]="miembroForm">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Nombre Completo</mat-label>
-          <input matInput formControlName="nombreCompleto">
+        <mat-form-field appearance="outline" class="dialog-field">
+          <mat-label>Nombre Completo *</mat-label>
+          <input matInput formControlName="nombreCompleto" cdkFocusInitial>
           <mat-error *ngIf="miembroForm.get('nombreCompleto')?.hasError('required')">Requerido</mat-error>
         </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Correo</mat-label>
+        <mat-form-field appearance="outline" class="dialog-field">
+          <mat-label>Correo *</mat-label>
           <input matInput formControlName="correo" type="email">
           <mat-error *ngIf="miembroForm.get('correo')?.hasError('required')">Requerido</mat-error>
           <mat-error *ngIf="miembroForm.get('correo')?.hasError('email')">Email inválido</mat-error>
         </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Teléfono</mat-label>
+        <mat-form-field appearance="outline" class="dialog-field">
+          <mat-label>Teléfono *</mat-label>
           <input matInput formControlName="telefono">
           <mat-error *ngIf="miembroForm.get('telefono')?.hasError('required')">Requerido</mat-error>
         </mat-form-field>
@@ -40,7 +40,7 @@ import { Miembro, CrearMiembro, ActualizarMiembro } from '../../models/miembro.m
       <button mat-raised-button color="primary" (click)="guardar()" [disabled]="miembroForm.invalid">Guardar</button>
     </mat-dialog-actions>
   `,
-  styles: [`.full-width { width: 100%; margin-bottom: 12px; }`]
+  styles: ['']
 })
 export class MiembroDialogComponent implements OnInit {
   miembroForm;

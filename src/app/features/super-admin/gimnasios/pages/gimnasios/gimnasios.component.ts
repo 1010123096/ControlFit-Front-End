@@ -17,6 +17,7 @@ import { ErrorStateComponent } from '../../../../../shared/components/error-stat
 import { GimnasioService } from '../../services/gimnasio.service';
 import { Gimnasio } from '../../models/gimnasio.model';
 import { GimnasioDialogComponent } from '../../components/gimnasio-dialog/gimnasio-dialog.component';
+import { ConfirmDialogComponent } from '../../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-gimnasios',
@@ -25,7 +26,7 @@ import { GimnasioDialogComponent } from '../../components/gimnasio-dialog/gimnas
     CommonModule, FormsModule, MatTableModule, MatButtonModule, MatIconModule,
     MatDialogModule, MatSlideToggleModule, MatFormFieldModule, MatInputModule,
     MatPaginatorModule, MatSortModule, MatTooltipModule,
-    LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent,
+    LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent, ConfirmDialogComponent,
   ],
   template: `
     <div class="page-header">
@@ -86,8 +87,14 @@ export class GimnasiosComponent implements OnInit {
   applyFilter(event: Event): void {
     this.dataSource.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
   }
-  abrirCrearDialog(): void { const ref = this.dialog.open(GimnasioDialogComponent, { width: '500px' }); ref.afterClosed().subscribe((r) => { if (r) this.cargarGimnasios(); }); }
-  abrirEditarDialog(g: Gimnasio): void { const ref = this.dialog.open(GimnasioDialogComponent, { width: '500px', data: g }); ref.afterClosed().subscribe((r) => { if (r) this.cargarGimnasios(); }); }
+  abrirCrearDialog(): void { const ref = this.dialog.open(GimnasioDialogComponent, { panelClass: 'dialog-responsive', autoFocus: 'first-tabbable' }); ref.afterClosed().subscribe((r) => { if (r) this.cargarGimnasios(); }); }
+  abrirEditarDialog(g: Gimnasio): void { const ref = this.dialog.open(GimnasioDialogComponent, { panelClass: 'dialog-responsive', autoFocus: 'first-tabbable', data: g }); ref.afterClosed().subscribe((r) => { if (r) this.cargarGimnasios(); }); }
   toggleEstado(g: Gimnasio): void { this.service.actualizar({ id: g.id, nombre: g.nombre, direccion: g.direccion, telefono: g.telefono, estado: !g.estado } as any).subscribe({ next: () => this.cargarGimnasios() }); }
-  eliminar(g: Gimnasio): void { if (confirm(`¿Eliminar gimnasio ${g.nombre}?`)) { this.service.eliminar(g.id).subscribe({ next: () => this.cargarGimnasios() }); } }
+  eliminar(g: Gimnasio): void {
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      panelClass: 'dialog-responsive',
+      data: { title: 'Eliminar gimnasio', message: `¿Eliminar gimnasio ${g.nombre}? Esta acción no se puede deshacer.`, confirmText: 'Eliminar', type: 'danger' }
+    });
+    ref.afterClosed().subscribe((confirmed) => { if (confirmed) this.service.eliminar(g.id).subscribe({ next: () => this.cargarGimnasios() }); });
+  }
 }

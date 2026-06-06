@@ -25,24 +25,24 @@ import { Membresia } from '../../../membresias/models/membresia.model';
     MatAutocompleteModule, MatIconModule,
   ],
   template: `
-    <h2 mat-dialog-title style="margin:0;padding:20px 24px 0;">Nueva Asignación</h2>
-    <mat-dialog-content style="padding-top:16px;">
+    <h2 mat-dialog-title>Nueva Asignación</h2>
+    <mat-dialog-content>
       <form [formGroup]="form">
         <mat-form-field appearance="outline" class="dialog-field">
-          <mat-label>Miembro</mat-label>
-          <input matInput formControlName="miembroCtrl" [matAutocomplete]="autoMiembro" placeholder="Buscar miembro por nombre">
+          <mat-label>Miembro *</mat-label>
+          <input matInput formControlName="miembroCtrl" [matAutocomplete]="autoMiembro" placeholder="Buscar miembro por nombre" cdkFocusInitial>
           <mat-icon matPrefix>person_search</mat-icon>
           <mat-error *ngIf="form.get('miembroCtrl')?.hasError('required')">Seleccione un miembro</mat-error>
         </mat-form-field>
         <mat-autocomplete #autoMiembro="matAutocomplete" [displayWith]="displayMiembro" (optionSelected)="onMiembroSelected($event)">
           <mat-option *ngFor="let m of filteredMiembros$ | async" [value]="m">
             <span style="font-weight:500;">{{ m.nombreCompleto }}</span>
-            <span style="margin-left:8px;color:#64748b;font-size:13px;">{{ m.correo }}</span>
+            <span style="margin-left:8px;color:var(--text-muted);font-size:13px;">{{ m.correo }}</span>
           </mat-option>
         </mat-autocomplete>
 
         <mat-form-field appearance="outline" class="dialog-field">
-          <mat-label>Membresía</mat-label>
+          <mat-label>Membresía *</mat-label>
           <input matInput formControlName="membresiaCtrl" [matAutocomplete]="autoMembresia" placeholder="Buscar membresía por nombre">
           <mat-icon matPrefix>card_membership</mat-icon>
           <mat-error *ngIf="form.get('membresiaCtrl')?.hasError('required')">Seleccione una membresía</mat-error>
@@ -50,12 +50,12 @@ import { Membresia } from '../../../membresias/models/membresia.model';
         <mat-autocomplete #autoMembresia="matAutocomplete" [displayWith]="displayMembresia" (optionSelected)="onMembresiaSelected($event)">
           <mat-option *ngFor="let m of filteredMembresias$ | async" [value]="m">
             <span style="font-weight:500;">{{ m.nombre }}</span>
-            <span style="margin-left:8px;color:#64748b;font-size:13px;">\${{ m.precio }} - {{ m.duracionDias }} días</span>
+            <span style="margin-left:8px;color:var(--text-muted);font-size:13px;">\${{ m.precio }} - {{ m.duracionDias }} días</span>
           </mat-option>
         </mat-autocomplete>
       </form>
     </mat-dialog-content>
-    <mat-dialog-actions align="end" style="padding:16px 24px;">
+    <mat-dialog-actions align="end">
       <button mat-stroked-button mat-dialog-close>Cancelar</button>
       <button mat-raised-button color="primary" (click)="guardar()" [disabled]="form.invalid">Guardar</button>
     </mat-dialog-actions>

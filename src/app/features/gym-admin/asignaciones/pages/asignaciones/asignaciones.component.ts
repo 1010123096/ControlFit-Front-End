@@ -16,6 +16,7 @@ import { ErrorStateComponent } from '../../../../../shared/components/error-stat
 import { AsignacionService } from '../../services/asignacion.service';
 import { Asignacion } from '../../models/asignacion.model';
 import { AsignacionDialogComponent } from '../../components/asignacion-dialog/asignacion-dialog.component';
+import { ConfirmDialogComponent } from '../../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-asignaciones',
@@ -24,7 +25,7 @@ import { AsignacionDialogComponent } from '../../components/asignacion-dialog/as
     CommonModule, FormsModule, MatTableModule, MatButtonModule, MatIconModule,
     MatDialogModule, MatFormFieldModule, MatInputModule,
     MatPaginatorModule, MatSortModule, MatTooltipModule,
-    LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent,
+    LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent, ConfirmDialogComponent,
   ],
   template: `
     <div class="page-header">
@@ -82,6 +83,12 @@ export class AsignacionesComponent implements OnInit {
   applyFilter(event: Event): void {
     this.dataSource.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
   }
-  abrirCrearDialog(): void { const ref = this.dialog.open(AsignacionDialogComponent, { width: '500px' }); ref.afterClosed().subscribe((r) => { if (r) this.cargarAsignaciones(); }); }
-  eliminar(a: Asignacion): void { if (confirm(`¿Eliminar asignación #${a.id}?`)) { this.service.eliminar(a.id).subscribe({ next: () => this.cargarAsignaciones() }); } }
+  abrirCrearDialog(): void { const ref = this.dialog.open(AsignacionDialogComponent, { panelClass: 'dialog-responsive', autoFocus: 'first-tabbable' }); ref.afterClosed().subscribe((r) => { if (r) this.cargarAsignaciones(); }); }
+  eliminar(a: Asignacion): void {
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      panelClass: 'dialog-responsive',
+      data: { title: 'Eliminar asignación', message: `¿Eliminar asignación #${a.id}? Esta acción no se puede deshacer.`, confirmText: 'Eliminar', type: 'danger' }
+    });
+    ref.afterClosed().subscribe((confirmed) => { if (confirmed) this.service.eliminar(a.id).subscribe({ next: () => this.cargarAsignaciones() }); });
+  }
 }

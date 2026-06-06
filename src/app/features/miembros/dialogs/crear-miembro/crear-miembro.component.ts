@@ -16,9 +16,9 @@ import { JwtDecodedService } from '../../../../core/services/jwt-decoded.service
     <h2 mat-dialog-title>Nuevo Miembro</h2>
     <mat-dialog-content>
       <form [formGroup]="form">
-        <mat-form-field appearance="outline" class="full-width"><mat-label>Nombre Completo</mat-label><input matInput formControlName="nombreCompleto"></mat-form-field>
-        <mat-form-field appearance="outline" class="full-width"><mat-label>Correo</mat-label><input matInput formControlName="correo" type="email"></mat-form-field>
-        <mat-form-field appearance="outline" class="full-width"><mat-label>Teléfono</mat-label><input matInput formControlName="telefono"></mat-form-field>
+        <mat-form-field appearance="outline" class="dialog-field"><mat-label>Nombre Completo *</mat-label><input matInput formControlName="nombreCompleto" cdkFocusInitial></mat-form-field>
+        <mat-form-field appearance="outline" class="dialog-field"><mat-label>Correo *</mat-label><input matInput formControlName="correo" type="email"></mat-form-field>
+        <mat-form-field appearance="outline" class="dialog-field"><mat-label>Teléfono *</mat-label><input matInput formControlName="telefono"></mat-form-field>
       </form>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
@@ -26,7 +26,7 @@ import { JwtDecodedService } from '../../../../core/services/jwt-decoded.service
       <button mat-raised-button color="primary" (click)="guardar()" [disabled]="form.invalid">Guardar</button>
     </mat-dialog-actions>
   `,
-  styles: [`.full-width { width: 100%; margin-bottom: 12px; }`]
+  styles: ['']
 })
 export class CrearMiembroDialogComponent {
   form;

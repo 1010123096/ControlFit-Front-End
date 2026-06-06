@@ -16,9 +16,9 @@ import { Gimnasio } from '../../models/gimnasio.model';
     <h2 mat-dialog-title>{{ data ? 'Editar Gimnasio' : 'Nuevo Gimnasio' }}</h2>
     <mat-dialog-content>
       <form [formGroup]="form">
-        <mat-form-field appearance="outline" class="full-width"><mat-label>Nombre</mat-label><input matInput formControlName="nombre"><mat-error *ngIf="form.get('nombre')?.hasError('required')">Requerido</mat-error></mat-form-field>
-        <mat-form-field appearance="outline" class="full-width"><mat-label>Dirección</mat-label><input matInput formControlName="direccion"><mat-error *ngIf="form.get('direccion')?.hasError('required')">Requerido</mat-error></mat-form-field>
-        <mat-form-field appearance="outline" class="full-width"><mat-label>Teléfono</mat-label><input matInput formControlName="telefono"><mat-error *ngIf="form.get('telefono')?.hasError('required')">Requerido</mat-error></mat-form-field>
+        <mat-form-field appearance="outline" class="dialog-field"><mat-label>Nombre *</mat-label><input matInput formControlName="nombre" cdkFocusInitial><mat-error *ngIf="form.get('nombre')?.hasError('required')">Requerido</mat-error></mat-form-field>
+        <mat-form-field appearance="outline" class="dialog-field"><mat-label>Dirección *</mat-label><input matInput formControlName="direccion"><mat-error *ngIf="form.get('direccion')?.hasError('required')">Requerido</mat-error></mat-form-field>
+        <mat-form-field appearance="outline" class="dialog-field"><mat-label>Teléfono *</mat-label><input matInput formControlName="telefono"><mat-error *ngIf="form.get('telefono')?.hasError('required')">Requerido</mat-error></mat-form-field>
       </form>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
@@ -26,7 +26,7 @@ import { Gimnasio } from '../../models/gimnasio.model';
       <button mat-raised-button color="primary" (click)="guardar()" [disabled]="form.invalid">Guardar</button>
     </mat-dialog-actions>
   `,
-  styles: [`.full-width { width: 100%; margin-bottom: 12px; }`]
+  styles: ['']
 })
 export class GimnasioDialogComponent implements OnInit {
   form;

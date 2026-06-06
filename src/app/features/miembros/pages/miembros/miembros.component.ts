@@ -10,11 +10,12 @@ import { ErrorStateComponent } from '../../../../shared/components/error-state/e
 import { MiembrosService } from '../../services/miembro.service';
 import { Miembro } from '../../models/miembro.model';
 import { CrearMiembroDialogComponent } from '../../dialogs/crear-miembro/crear-miembro.component';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-miembros-legacy',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatButtonModule, MatIconModule, MatDialogModule, LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent],
+  imports: [CommonModule, MatTableModule, MatButtonModule, MatIconModule, MatDialogModule, LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent, ConfirmDialogComponent],
   template: `
     <div class="header"><h1>Miembros (Legacy)</h1><button mat-raised-button color="primary" (click)="abrirCrearDialog()"><mat-icon>add</mat-icon> Nuevo Miembro</button></div>
     <app-loading-spinner *ngIf="loading" text="Cargando..."></app-loading-spinner>
@@ -37,6 +38,12 @@ export class MiembrosLegacyComponent implements OnInit {
   constructor(private service: MiembrosService, private dialog: MatDialog) {}
   ngOnInit(): void { this.cargarMiembros(); }
   cargarMiembros(): void { this.loading = true; this.error = false; this.service.obtenerTodos().subscribe({ next: (d) => { this.miembros = d; this.loading = false; }, error: () => { this.loading = false; this.error = true; } }); }
-  abrirCrearDialog(): void { const ref = this.dialog.open(CrearMiembroDialogComponent, { width: '500px' }); ref.afterClosed().subscribe((r) => { if (r) this.cargarMiembros(); }); }
-  eliminar(m: Miembro): void { if (confirm(`¿Eliminar a ${m.nombreCompleto}?`)) { this.service.eliminar(m.id).subscribe({ next: () => this.cargarMiembros() }); } }
+  abrirCrearDialog(): void { const ref = this.dialog.open(CrearMiembroDialogComponent, { panelClass: 'dialog-responsive', autoFocus: 'first-tabbable' }); ref.afterClosed().subscribe((r) => { if (r) this.cargarMiembros(); }); }
+  eliminar(m: Miembro): void {
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      panelClass: 'dialog-responsive',
+      data: { title: 'Eliminar miembro', message: `¿Eliminar a ${m.nombreCompleto}? Esta acción no se puede deshacer.`, confirmText: 'Eliminar', cancelText: 'Cancelar', type: 'danger' }
+    });
+    ref.afterClosed().subscribe((confirmed) => { if (confirmed) this.service.eliminar(m.id).subscribe({ next: () => this.cargarMiembros() }); });
+  }
 }
