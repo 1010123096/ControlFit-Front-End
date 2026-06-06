@@ -9,6 +9,11 @@ on:
 env:
   NODE_VERSION: '20.x'
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build-test:
     name: Build, Unit Tests & E2E
@@ -120,3 +125,96 @@ jobs:
           path: |
             report_json.json
             report_html.html
+
+  dashboard:
+    name: Dashboard
+    runs-on: ubuntu-latest
+    needs: [build-test, security]
+    if: always()
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: playwright-report
+          path: reports/
+        continue-on-error: true
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: frontend-coverage
+          path: reports/coverage
+        continue-on-error: true
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: zap-security-report
+          path: reports/zap
+        continue-on-error: true
+
+      - name: Generate index.html
+        run: |
+          cat > reports/index.html << 'HTML'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>ControlFit Frontend — Reports</title>
+          <style>
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; padding: 32px; max-width: 960px; margin: 0 auto; }
+            h1 { color: #58a6ff; margin-bottom: 8px; font-size: 2rem; }
+            p { color: #8b949e; margin-bottom: 24px; }
+            .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+            .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 20px; text-decoration: none; color: inherit; display: block; transition: border-color .2s; }
+            .card:hover { border-color: #58a6ff; }
+            .card h2 { color: #f0f6fc; font-size: 1.1rem; margin-bottom: 6px; }
+            .card p { color: #8b949e; font-size: .85rem; margin: 0; }
+            .card .status { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: .75rem; font-weight: 600; margin-top: 8px; }
+            .status.found { background: #0f2d1a; color: #3fb950; }
+            .status.missing { background: #2d0f0f; color: #f85149; }
+          </style>
+          </head>
+          <body>
+          <h1>ControlFit Frontend — Reports</h1>
+          <p>Commit <code>${{ github.sha }}</code> · <code>${{ github.ref_name }}</code></p>
+          <div class="grid">
+            <a class="card" href="playwright-report/index.html" target="_blank">
+              <h2>Playwright E2E</h2>
+              <p>End-to-end test report with videos</p>
+              <span class="status found">View</span>
+            </a>
+            <a class="card" href="coverage/" target="_blank">
+              <h2>Unit Test Coverage</h2>
+              <p>Istanbul HTML coverage report</p>
+              <span class="status found">View</span>
+            </a>
+            <a class="card" href="zap/report_html.html" target="_blank">
+              <h2>Security (ZAP)</h2>
+              <p>OWASP ZAP full scan report</p>
+              <span class="status found">View</span>
+            </a>
+          </div>
+          </body>
+          </html>
+          HTML
+
+      - name: Upload dashboard artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dashboard
+          path: reports/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: reports/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
