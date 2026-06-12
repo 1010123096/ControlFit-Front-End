@@ -25,7 +25,7 @@ import { ConfirmDialogComponent } from '../../../../../shared/components/confirm
     CommonModule, FormsModule, MatTableModule, MatButtonModule, MatIconModule,
     MatDialogModule, MatFormFieldModule, MatInputModule,
     MatPaginatorModule, MatSortModule, MatTooltipModule,
-    LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent, ConfirmDialogComponent,
+    LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent,
   ],
   template: `
     <div class="page-header">

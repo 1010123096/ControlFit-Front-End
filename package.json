@@ -13,6 +13,12 @@
     "sonar": "sonar-scanner"
   },
   "private": true,
+  "engines": {
+    "node": ">=20.11.0 <23"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-darwin-arm64": "^4.59.0"
+  },
   "dependencies": {
     "@angular/animations": "~19.2.0",
     "@angular/cdk": "~19.2.0",

@@ -7,8 +7,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   standalone: true,
   imports: [CommonModule, MatProgressSpinnerModule],
   template: `
-    <div class="loading-container">
-      <mat-spinner [diameter]="diameter"></mat-spinner>
+    <div class="loading-container content-card">
+      <mat-spinner [diameter]="diameter" color="primary"></mat-spinner>
       <p *ngIf="text" class="loading-text">{{ text }}</p>
     </div>
   `,
@@ -18,16 +18,17 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 48px 24px;
+      padding: 64px 32px;
     }
     .loading-text {
-      margin-top: 16px;
-      color: rgba(0,0,0,0.54);
+      margin-top: 20px;
+      color: var(--text-muted);
       font-size: 14px;
+      font-weight: 500;
     }
   `]
 })
 export class LoadingSpinnerComponent {
-  @Input() diameter = 40;
+  @Input() diameter = 44;
   @Input() text = 'Cargando...';
 }

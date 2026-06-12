@@ -15,4 +15,12 @@ export class AuthService {
   login(correo: string, contrasena: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { correo, contrasena });
   }
+
+  refresh(refreshToken: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/refresh`, { refreshToken });
+  }
+
+  logout(refreshToken: string | null): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}/logout`, { refreshToken });
+  }
 }

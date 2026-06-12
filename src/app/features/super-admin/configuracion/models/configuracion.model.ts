@@ -4,3 +4,9 @@ export interface Configuracion {
   correoContacto: string;
   telefonoContacto: string;
 }
+
+export interface ActualizarConfiguracion {
+  nombreSistema: string;
+  correoContacto: string;
+  telefonoContacto: string;
+}

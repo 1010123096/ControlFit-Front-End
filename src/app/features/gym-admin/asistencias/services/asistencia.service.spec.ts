@@ -19,11 +19,11 @@ describe('AsistenciaService', () => {
   afterEach(() => httpMock.verify());
 
   it('should fetch all asistencias', () => {
-    const mock = [{ id: 1, miembroId: 1, gimnasioId: 1, fechaHora: '2024-01-01T10:00:00' }];
+    const mock = [{ id: 1, miembroId: 1, fechaHoraAcceso: '2024-01-01T10:00:00' }];
     service.obtenerTodas().subscribe((res) => expect(res).toEqual(mock));
     const req = httpMock.expectOne(`${environment.apiUrl}/Asistencia`);
     expect(req.request.method).toBe('GET');
-    req.flush(mock);
+    req.flush({ data: mock, total: 1 });
   });
 
   it('should register asistencia', () => {

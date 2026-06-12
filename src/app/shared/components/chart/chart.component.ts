@@ -8,7 +8,7 @@ Chart.register(...registerables);
   selector: 'app-chart',
   standalone: true,
   imports: [CommonModule],
-  template: `<canvas #canvas></canvas>`,
+  template: `<canvas #canvas [attr.role]="'img'" [attr.aria-label]="ariaLabel"></canvas>`,
   styles: [`canvas { width: 100%; height: 100%; display: block; }`]
 })
 export class ChartComponent implements AfterViewInit, OnChanges {
@@ -17,6 +17,7 @@ export class ChartComponent implements AfterViewInit, OnChanges {
   @Input() labels: string[] = [];
   @Input() datasets: { label: string; data: number[]; backgroundColor?: string | string[] }[] = [];
   @Input() options?: ChartConfiguration['options'];
+  @Input() ariaLabel = 'Gráfico de datos';
 
   private chart: Chart | null = null;
 

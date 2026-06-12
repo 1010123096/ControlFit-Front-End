@@ -12,24 +12,56 @@ import { Historial } from '../../models/historial.model';
   standalone: true,
   imports: [CommonModule, MatTableModule, LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent],
   template: `
-    <h1>Historial</h1>
+    <div class="page-header">
+      <div>
+        <h1>Historial</h1>
+        <p class="page-subtitle">Registro de actividad y movimientos del gimnasio</p>
+      </div>
+    </div>
+
     <app-loading-spinner *ngIf="loading" text="Cargando historial..."></app-loading-spinner>
-    <app-empty-state *ngIf="!loading && historial.length === 0 && !error" message="No hay registros en el historial" icon="history"></app-empty-state>
+    <app-empty-state *ngIf="!loading && historial.length === 0 && !error"
+      message="No hay registros en el historial" submessage="Las acciones importantes aparecerán aquí" icon="history">
+    </app-empty-state>
     <app-error-state *ngIf="error" message="Error al cargar historial" (retry)="cargarHistorial()"></app-error-state>
-    <table mat-table [dataSource]="historial" *ngIf="!loading && historial.length > 0" class="full-width">
-      <ng-container matColumnDef="id"><th mat-header-cell *matHeaderCellDef>ID</th><td mat-cell *matCellDef="let h">{{ h.id }}</td></ng-container>
-      <ng-container matColumnDef="accion"><th mat-header-cell *matHeaderCellDef>Acción</th><td mat-cell *matCellDef="let h">{{ h.accion }}</td></ng-container>
-      <ng-container matColumnDef="fecha"><th mat-header-cell *matHeaderCellDef>Fecha</th><td mat-cell *matCellDef="let h">{{ h.fecha | date:'short' }}</td></ng-container>
-      <tr mat-header-row *matHeaderRowDef="columnas"></tr><tr mat-row *matRowDef="let row; columns: columnas;"></tr>
-    </table>
+
+    <div class="table-container" *ngIf="!loading && historial.length > 0">
+      <table mat-table [dataSource]="historial">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let h">{{ h.id }}</td>
+        </ng-container>
+        <ng-container matColumnDef="accion">
+          <th mat-header-cell *matHeaderCellDef>Acción</th>
+          <td mat-cell *matCellDef="let h">{{ h.accion }}</td>
+        </ng-container>
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef>Fecha</th>
+          <td mat-cell *matCellDef="let h">{{ h.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+      </table>
+    </div>
   `,
-  styles: [`.full-width { width: 100%; }`]
+  styles: ['']
 })
 export class HistorialComponent implements OnInit {
   historial: Historial[] = [];
   columnas = ['id', 'accion', 'fecha'];
-  loading = false; error = false;
+  loading = false;
+  error = false;
+
   constructor(private service: HistorialService) {}
+
   ngOnInit(): void { this.cargarHistorial(); }
-  cargarHistorial(): void { this.loading = true; this.error = false; this.service.obtenerTodos().subscribe({ next: (d) => { this.historial = d; this.loading = false; }, error: () => { this.loading = false; this.error = true; } }); }
+
+  cargarHistorial(): void {
+    this.loading = true;
+    this.error = false;
+    this.service.obtenerTodos().subscribe({
+      next: (d) => { this.historial = d; this.loading = false; },
+      error: () => { this.loading = false; this.error = true; }
+    });
+  }
 }

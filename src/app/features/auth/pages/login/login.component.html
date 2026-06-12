@@ -2,16 +2,16 @@
   <div class="login-card">
     <div class="login-header">
       <div class="login-logo">
-        <mat-icon style="font-size:32px;height:32px;width:32px;">fitness_center</mat-icon>
+        <mat-icon style="font-size:36px;height:36px;width:36px;">fitness_center</mat-icon>
       </div>
-      <h1 class="login-title">ControlFit</h1>
-      <p class="login-subtitle">Inicia sesión para administrar tu gimnasio</p>
+      <h1 class="login-title">CossGym</h1>
+      <p class="login-subtitle">Gestiona miembros, membresías y asistencias desde un solo lugar</p>
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="outline" class="full-width" style="margin-bottom:16px;">
         <mat-label>Correo electrónico</mat-label>
-        <input matInput formControlName="correo" type="email" placeholder="correo@ejemplo.com" autocomplete="email">
+        <input matInput formControlName="correo" type="email" placeholder="correo@cossgym.com" autocomplete="email">
         <mat-icon matPrefix>email</mat-icon>
         <mat-error *ngIf="loginForm.get('correo')?.hasError('required')">El correo es requerido</mat-error>
         <mat-error *ngIf="loginForm.get('correo')?.hasError('email')">Correo inválido</mat-error>
@@ -21,7 +21,7 @@
         <mat-label>Contraseña</mat-label>
         <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="contrasena" autocomplete="current-password">
         <mat-icon matPrefix>lock</mat-icon>
-        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="hidePassword">
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" aria-label="Mostrar u ocultar contraseña" [attr.aria-pressed]="hidePassword">
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
         <mat-error *ngIf="loginForm.get('contrasena')?.hasError('required')">La contraseña es requerida</mat-error>
@@ -30,10 +30,31 @@
 
       <button mat-raised-button color="primary" class="full-width submit-btn" type="submit" [disabled]="loading || loginForm.invalid">
         <mat-spinner *ngIf="loading" diameter="22"></mat-spinner>
-        <span *ngIf="!loading">Ingresar</span>
+        <span *ngIf="!loading">Ingresar al panel</span>
       </button>
     </form>
 
-    <p class="login-footer">ControlFit &copy; 2026</p>
+    <div class="login-features">
+      <div class="login-feature">
+        <mat-icon>people</mat-icon>
+        <span>Miembros</span>
+      </div>
+      <div class="login-feature">
+        <mat-icon>how_to_reg</mat-icon>
+        <span>Asistencias</span>
+      </div>
+      <div class="login-feature">
+        <mat-icon>insights</mat-icon>
+        <span>Reportes</span>
+      </div>
+    </div>
+
+    <p class="login-footer">CossGym &copy; 2026 · Plataforma de gestión fitness</p>
+
+    <div class="dev-hint" *ngIf="!isProduction">
+      <p><strong>Dev:</strong> gym → <code>gym&#64;cossgym.com</code> / <code>123456</code></p>
+      <p>plataforma → <code>admin&#64;controlfit.com</code> / <code>123456</code></p>
+      <p class="dev-hint-note">Si falla el login, ejecuta <code>POST /api/seed</code> en Swagger.</p>
+    </div>
   </div>
 </div>

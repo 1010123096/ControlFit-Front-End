@@ -3,4 +3,5 @@ export interface DashboardStats {
   miembrosActivos: number;
   membresiasVencidas: number;
   asistenciasHoy: number;
+  asistenciasSemanales?: number[];
 }

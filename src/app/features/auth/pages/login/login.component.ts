@@ -12,6 +12,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { TokenService } from '../../../../core/services/token.service';
 import { JwtDecodedService } from '../../../../core/services/jwt-decoded.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -34,6 +35,7 @@ export class LoginComponent {
   loginForm;
   loading = false;
   hidePassword = true;
+  isProduction = environment.production;
 
   constructor(
     private fb: FormBuilder,
@@ -59,6 +61,9 @@ export class LoginComponent {
     this.authService.login(correo!, contrasena!).subscribe({
       next: (response) => {
         this.tokenService.setToken(response.token);
+        if (response.refreshToken) {
+          this.tokenService.setRefreshToken(response.refreshToken);
+        }
         this.notificationService.showSuccess('Inicio de sesión exitoso');
         this.redirectByRole();
       },

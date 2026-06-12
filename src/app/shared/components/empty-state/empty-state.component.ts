@@ -7,8 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [CommonModule, MatIconModule],
   template: `
-    <div class="empty-state">
-      <mat-icon>{{ icon }}</mat-icon>
+    <div class="empty-state content-card">
+      <div class="empty-icon-wrap">
+        <mat-icon>{{ icon }}</mat-icon>
+      </div>
       <h3>{{ message }}</h3>
       <p *ngIf="submessage">{{ submessage }}</p>
     </div>
@@ -19,26 +21,37 @@ import { MatIconModule } from '@angular/material/icon';
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 48px 24px;
+      padding: 56px 32px;
       text-align: center;
-      color: rgba(0,0,0,0.54);
+    }
+    .empty-icon-wrap {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(27, 94, 32, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
     }
     .empty-state mat-icon {
-      font-size: 64px;
-      height: 64px;
-      width: 64px;
-      margin-bottom: 16px;
-      opacity: 0.5;
+      font-size: 40px;
+      height: 40px;
+      width: 40px;
+      color: var(--brand-primary);
+      opacity: 0.85;
     }
     .empty-state h3 {
       margin: 0 0 8px;
-      font-size: 18px;
-      font-weight: 500;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
     }
     .empty-state p {
       margin: 0;
       font-size: 14px;
-      opacity: 0.7;
+      color: var(--text-muted);
+      max-width: 360px;
     }
   `]
 })

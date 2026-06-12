@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,18 +21,18 @@ import { JwtDecodedService } from '../../../core/services/jwt-decoded.service';
     MatIconModule, MatButtonModule, MatMenuModule, MatDividerModule,
   ],
   template: `
-    <mat-toolbar color="primary" class="toolbar">
-      <button mat-icon-button (click)="sidenav.toggle()" class="menu-btn">
-        <mat-icon>menu</mat-icon>
+    <mat-toolbar color="primary" class="app-toolbar">
+      <button mat-icon-button (click)="sidenav.toggle()" aria-label="Abrir menú de navegación">
+        <mat-icon aria-hidden="true">menu</mat-icon>
       </button>
-      <span class="toolbar-title">
-        <mat-icon class="toolbar-logo">fitness_center</mat-icon>
-        ControlFit
+      <span class="app-toolbar-title">
+        <mat-icon class="app-toolbar-logo" aria-hidden="true">fitness_center</mat-icon>
+        CossGym
       </span>
-      <span class="toolbar-subtitle">{{ nombreGimnasio }}</span>
+      <span class="app-toolbar-subtitle">{{ nombreGimnasio }}</span>
       <span class="spacer"></span>
       <button mat-icon-button [matMenuTriggerFor]="menu" class="user-menu-btn" aria-label="Menú de usuario">
-        <mat-icon>account_circle</mat-icon>
+        <mat-icon aria-hidden="true">account_circle</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
         <div class="user-menu-header">
@@ -43,195 +44,96 @@ import { JwtDecodedService } from '../../../core/services/jwt-decoded.service';
         </div>
         <mat-divider></mat-divider>
         <button mat-menu-item (click)="logout()" class="logout-menu-item">
-          <mat-icon>logout</mat-icon>
-          <span>Cerrar sesión</span>
+          <mat-icon matMenuItemIcon aria-hidden="true">logout</mat-icon>
+          <span matMenuItemTitle>Cerrar sesión</span>
         </button>
       </mat-menu>
     </mat-toolbar>
-    <mat-sidenav-container>
-      <mat-sidenav #sidenav mode="side" opened class="sidenav">
-        <div class="sidenav-header">
-          <div class="sidenav-avatar">{{ inicial }}</div>
-          <div class="sidenav-user-name">{{ nombreGimnasio }}</div>
-          <div class="sidenav-user-role">Admin Gimnasio</div>
+
+    <mat-sidenav-container class="app-shell-container">
+      <mat-sidenav #sidenav [mode]="sidenavMode" [opened]="sidenavOpened" class="app-sidenav">
+        <div class="app-sidenav-header">
+          <div class="app-sidenav-avatar">{{ inicial }}</div>
+          <div class="app-sidenav-user-name">{{ nombreGimnasio }}</div>
+          <div class="app-sidenav-user-role">Administrador</div>
         </div>
-        <mat-nav-list class="sidenav-nav">
-          <a mat-list-item routerLink="/gym-admin/dashboard" routerLinkActive="active-link">
-            <mat-icon>dashboard</mat-icon>
-            <span>Dashboard</span>
-          </a>
-          <a mat-list-item routerLink="/gym-admin/miembros" routerLinkActive="active-link">
-            <mat-icon>people</mat-icon>
-            <span>Miembros</span>
-          </a>
-          <a mat-list-item routerLink="/gym-admin/membresias" routerLinkActive="active-link">
-            <mat-icon>card_membership</mat-icon>
-            <span>Membresías</span>
-          </a>
-          <a mat-list-item routerLink="/gym-admin/asignaciones" routerLinkActive="active-link">
-            <mat-icon>assignment</mat-icon>
-            <span>Asignaciones</span>
-          </a>
-          <a mat-list-item routerLink="/gym-admin/asistencias" routerLinkActive="active-link">
+
+        <div class="app-sidenav-quick">
+          <button mat-flat-button color="primary" routerLink="/gym-admin/asistencias/registrar" (click)="closeSidenavIfMobile(sidenav)">
             <mat-icon>how_to_reg</mat-icon>
-            <span>Asistencias</span>
+            Registrar asistencia
+          </button>
+        </div>
+
+        <mat-nav-list class="app-sidenav-nav">
+          <a mat-list-item routerLink="/gym-admin/dashboard" routerLinkActive="active-link" (click)="closeSidenavIfMobile(sidenav)">
+            <mat-icon matListItemIcon aria-hidden="true">dashboard</mat-icon>
+            <span matListItemTitle>Dashboard</span>
+          </a>
+          <a mat-list-item routerLink="/gym-admin/miembros" routerLinkActive="active-link" (click)="closeSidenavIfMobile(sidenav)">
+            <mat-icon matListItemIcon aria-hidden="true">people</mat-icon>
+            <span matListItemTitle>Miembros</span>
+          </a>
+          <a mat-list-item routerLink="/gym-admin/membresias" routerLinkActive="active-link" (click)="closeSidenavIfMobile(sidenav)">
+            <mat-icon matListItemIcon aria-hidden="true">card_membership</mat-icon>
+            <span matListItemTitle>Membresías</span>
+          </a>
+          <a mat-list-item routerLink="/gym-admin/asignaciones" routerLinkActive="active-link" (click)="closeSidenavIfMobile(sidenav)">
+            <mat-icon matListItemIcon aria-hidden="true">assignment</mat-icon>
+            <span matListItemTitle>Asignaciones</span>
+          </a>
+          <a mat-list-item routerLink="/gym-admin/asistencias" routerLinkActive="active-link" (click)="closeSidenavIfMobile(sidenav)">
+            <mat-icon matListItemIcon aria-hidden="true">how_to_reg</mat-icon>
+            <span matListItemTitle>Asistencias</span>
+          </a>
+          <a mat-list-item routerLink="/gym-admin/historial" routerLinkActive="active-link" (click)="closeSidenavIfMobile(sidenav)">
+            <mat-icon matListItemIcon aria-hidden="true">history</mat-icon>
+            <span matListItemTitle>Historial</span>
           </a>
         </mat-nav-list>
       </mat-sidenav>
+
       <mat-sidenav-content>
-        <div class="content fade-in">
+        <div class="app-content fade-in">
           <router-outlet></router-outlet>
         </div>
       </mat-sidenav-content>
     </mat-sidenav-container>
   `,
   styles: [`
-    .toolbar {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .toolbar-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 20px;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-    }
-    .toolbar-logo {
-      font-size: 28px;
-      height: 28px;
-      width: 28px;
-    }
-    .toolbar-subtitle {
-      margin-left: 12px;
-      font-size: 14px;
-      opacity: 0.8;
-      font-weight: 300;
-    }
-    .menu-btn {
-      margin-right: 8px;
-    }
-    .user-btn {
-      margin-left: 8px;
-    }
-    .spacer { flex: 1 1 auto; }
-    mat-sidenav-container {
-      height: calc(100vh - 64px);
-      background: #f5f7fa;
-    }
-    .sidenav {
-      width: 260px;
-      border-right: none;
-      background: #ffffff;
-    }
-    .sidenav-header {
-      padding: 24px 20px;
-      text-align: center;
-      border-bottom: 1px solid #e2e8f0;
-      margin-bottom: 8px;
-    }
-    .sidenav-avatar {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #3f51b5, #7c4dff);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      font-weight: 600;
-      margin: 0 auto 12px;
-    }
-    .sidenav-user-name {
-      font-size: 16px;
-      font-weight: 500;
-      color: #0f172a;
-    }
-    .sidenav-user-role {
-      font-size: 13px;
-      color: #64748b;
-      margin-top: 4px;
-    }
-    .sidenav-nav a[mat-list-item] {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      height: 48px;
-      margin: 2px 8px;
-      border-radius: 8px;
-      font-size: 14px;
-      color: #475569;
-    }
-    .sidenav-nav a[mat-list-item]:hover {
-      background: #f1f5f9;
-    }
-    .sidenav-nav a[mat-list-item] mat-icon {
-      margin-right: 12px;
-      color: #64748b;
-    }
-    .sidenav-nav a.active-link mat-icon {
-      color: #3f51b5;
-    }
-    .content {
-      padding: 32px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .user-info-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      min-width: 220px;
-    }
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #3f51b5;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      font-weight: 500;
-    }
-    .user-name {
-      font-size: 14px;
-      font-weight: 500;
-    }
-    .user-role {
-      font-size: 12px;
-      color: #64748b;
-    }
-    @media (max-width: 768px) {
-      .sidenav { width: 240px; }
-      .content { padding: 16px; }
-      .toolbar-subtitle { display: none; }
-    }
+    .user-name { font-size: 14px; font-weight: 600; }
+    .user-role { font-size: 12px; color: var(--text-muted); }
   `]
 })
 export class GymAdminLayoutComponent {
   nombreGimnasio = '';
   userEmail = '';
   inicial = 'G';
+  sidenavMode: 'side' | 'over' = 'side';
+  sidenavOpened = true;
 
   constructor(
     private tokenService: TokenService,
     private jwtDecodedService: JwtDecodedService,
-    private router: Router
+    private router: Router,
+    private breakpointObserver: BreakpointObserver
   ) {
-    this.nombreGimnasio = this.jwtDecodedService.getNombreGimnasio() || 'Gimnasio';
+    this.nombreGimnasio = this.jwtDecodedService.getNombreGimnasio() || 'Mi Gimnasio';
     this.userEmail = this.jwtDecodedService.getEmail() || '';
     this.inicial = this.nombreGimnasio.charAt(0).toUpperCase();
+
+    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.TabletPortrait]).subscribe(result => {
+      this.sidenavMode = result.matches ? 'over' : 'side';
+      this.sidenavOpened = !result.matches;
+    });
+  }
+
+  closeSidenavIfMobile(sidenav: MatSidenav): void {
+    if (this.sidenavMode === 'over') sidenav.close();
   }
 
   logout(): void {
-    this.tokenService.clearToken();
+    this.tokenService.clearAll();
     this.router.navigate(['/']);
   }
 }

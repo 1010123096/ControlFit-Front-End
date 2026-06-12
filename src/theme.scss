@@ -3,46 +3,77 @@
 html {
   color-scheme: light;
 
-  /* Primary palette — Indigo, accesible y consistente */
-  --mat-sys-primary: #3f51b5;
-  --mat-sys-on-primary: #ffffff;
-  --mat-sys-primary-container: #e8eaf6;
-  --mat-sys-on-primary-container: #1a237e;
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$green-palette,
+      tertiary: mat.$orange-palette,
+    ),
+    typography: (
+      plain-family: Inter,
+      brand-family: Inter,
+    ),
+    density: 0,
+  ));
 
-  /* Secondary palette — Deep purple */
-  --mat-sys-secondary: #7c4dff;
-  --mat-sys-on-secondary: #ffffff;
-  --mat-sys-secondary-container: #ede7f6;
-  --mat-sys-on-secondary-container: #311b92;
+  /* CossGym tokens — wrapped to avoid Sass mixed-decls after @include */
+  & {
+    --brand-primary: #1B5E20;
+    --brand-secondary: #FF6F00;
+    --brand-surface: #FAFAFA;
+    --brand-on-primary: #FFFFFF;
 
-  /* Tertiary palette — Green for success states */
-  --mat-sys-tertiary: #43a047;
-  --mat-sys-on-tertiary: #ffffff;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 16px;
+    --space-4: 24px;
+    --space-5: 32px;
+    --space-6: 48px;
 
-  /* Surface & Background — neutrals limpios */
-  --mat-sys-background: #f5f7fa;
-  --mat-sys-on-background: #1e293b;
-  --mat-sys-surface: #ffffff;
-  --mat-sys-on-surface: #1e293b;
-  --mat-sys-surface-variant: #f1f5f9;
-  --mat-sys-on-surface-variant: #475569;
+    --sidebar-width: 260px;
+    --header-height: 64px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
 
-  /* Outlines & dividers */
-  --mat-sys-outline: #cbd5e1;
-  --mat-sys-outline-variant: #e2e8f0;
+    --mat-sys-primary: #1B5E20;
+    --mat-sys-on-primary: #ffffff;
+    --mat-sys-primary-container: #E8F5E9;
+    --mat-sys-on-primary-container: #1B5E20;
 
-  /* Error / Warn */
-  --mat-sys-error: #d32f2f;
-  --mat-sys-on-error: #ffffff;
-  --mat-sys-error-container: #ffebee;
-  --mat-sys-on-error-container: #b71c1c;
+    --mat-sys-secondary: #2E7D32;
+    --mat-sys-on-secondary: #ffffff;
+    --mat-sys-secondary-container: #C8E6C9;
+    --mat-sys-on-secondary-container: #1B5E20;
 
-  /* Semánticos custom para UX */
-  --text-primary: #1e293b;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
-  --text-disabled: #94a3b8;
-  --surface-elevated: #ffffff;
-  --surface-hover: #f1f5f9;
-  --shadow-color: rgba(0, 0, 0, 0.08);
+    --mat-sys-tertiary: #FF6F00;
+    --mat-sys-on-tertiary: #ffffff;
+
+    --mat-sys-background: #f4f7f5;
+    --mat-sys-on-background: #1e293b;
+    --mat-sys-surface: #ffffff;
+    --mat-sys-on-surface: #1e293b;
+    --mat-sys-surface-variant: #eef2ef;
+    --mat-sys-on-surface-variant: #475569;
+
+    --mat-sys-outline: #cbd5e1;
+    --mat-sys-outline-variant: #e2e8f0;
+
+    --mat-sys-error: #C62828;
+    --mat-sys-on-error: #ffffff;
+    --mat-sys-error-container: #ffebee;
+    --mat-sys-on-error-container: #b71c1c;
+
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --text-disabled: #94a3b8;
+    --surface-elevated: #ffffff;
+    --surface-hover: #f1f5f9;
+    --shadow-color: rgba(0, 0, 0, 0.08);
+    --color-success: #2E7D32;
+    --color-warning: #F57C00;
+    --color-error: #C62828;
+    --color-info: #0277BD;
+  }
 }

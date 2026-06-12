@@ -27,6 +27,12 @@ export const SUPER_ADMIN_ROUTES: Routes = [
         data: { roles: ['Super Admin'] }
       },
       {
+        path: 'auditoria',
+        loadChildren: () => import('../auditoria/routes').then(m => m.AUDITORIA_ROUTES),
+        canActivate: [RoleGuard],
+        data: { roles: ['Super Admin'] }
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

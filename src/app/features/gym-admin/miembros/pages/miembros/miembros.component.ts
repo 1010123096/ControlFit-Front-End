@@ -26,11 +26,14 @@ import { ConfirmDialogComponent } from '../../../../../shared/components/confirm
     CommonModule, FormsModule, MatTableModule, MatButtonModule, MatIconModule,
     MatDialogModule, MatSnackBarModule, MatFormFieldModule, MatInputModule,
     MatPaginatorModule, MatSortModule, MatTooltipModule,
-    LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent, ConfirmDialogComponent,
+    LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent,
   ],
   template: `
     <div class="page-header">
-      <h1>Miembros</h1>
+      <div>
+        <h1>Miembros</h1>
+        <p class="page-subtitle">Administra la base de socios de tu gimnasio</p>
+      </div>
       <button mat-raised-button color="primary" (click)="abrirCrearDialog()">
         <mat-icon>add</mat-icon> Nuevo Miembro
       </button>
@@ -41,8 +44,8 @@ import { ConfirmDialogComponent } from '../../../../../shared/components/confirm
     <app-error-state *ngIf="error" message="Error al cargar miembros" (retry)="cargarMiembros()"></app-error-state>
 
     <div class="table-container" *ngIf="!loading && miembros.length > 0">
-      <div style="padding: 16px 16px 0;">
-        <mat-form-field appearance="outline" class="search-field" style="width:100%;max-width:360px;">
+      <div class="table-toolbar">
+        <mat-form-field appearance="outline" class="search-field">
           <mat-label>Buscar miembro</mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="Nombre, correo o teléfono" #input>
           <mat-icon matPrefix>search</mat-icon>

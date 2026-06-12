@@ -17,61 +17,79 @@ import { GimnasioService } from '../../../../super-admin/gimnasios/services/gimn
     LoadingSpinnerComponent, ErrorStateComponent, ChartComponent,
   ],
   template: `
-    <h1 style="margin:0 0 24px;font-weight:500;color:#0f172a;">Panel de Super Administrador</h1>
+    <div class="page-header">
+      <div>
+        <h1>Panel de Plataforma</h1>
+        <p class="page-subtitle">Vista global de gimnasios y operación CossGym</p>
+      </div>
+    </div>
 
     <app-loading-spinner *ngIf="loading" text="Cargando dashboard..."></app-loading-spinner>
     <app-error-state *ngIf="error" message="Error al cargar dashboard" (retry)="cargarStats()"></app-error-state>
 
-    <div class="stats-grid" *ngIf="!loading">
-      <mat-card class="stat-card" style="border-top:4px solid #1a237e;">
+    <div class="stats-grid" *ngIf="!loading && !error">
+      <mat-card class="stat-card stat-primary">
         <mat-card-content>
-          <mat-icon class="stat-icon" style="color:#1a237e;">business</mat-icon>
+          <mat-icon class="stat-icon">business</mat-icon>
           <div class="stat-value">{{ stats.totalGimnasios }}</div>
-          <div class="stat-label">Total Gimnasios</div>
+          <div class="stat-label">Gimnasios</div>
         </mat-card-content>
       </mat-card>
-      <mat-card class="stat-card" style="border-top:4px solid #3f51b5;">
+      <mat-card class="stat-card stat-success">
         <mat-card-content>
-          <mat-icon class="stat-icon" style="color:#3f51b5;">people</mat-icon>
+          <mat-icon class="stat-icon">people</mat-icon>
           <div class="stat-value">{{ stats.totalMiembros }}</div>
-          <div class="stat-label">Total Miembros</div>
+          <div class="stat-label">Miembros totales</div>
         </mat-card-content>
       </mat-card>
-      <mat-card class="stat-card" style="border-top:4px solid #7c4dff;">
+      <mat-card class="stat-card stat-info">
         <mat-card-content>
-          <mat-icon class="stat-icon" style="color:#7c4dff;">admin_panel_settings</mat-icon>
+          <mat-icon class="stat-icon">admin_panel_settings</mat-icon>
           <div class="stat-value">{{ stats.totalAdministradores }}</div>
           <div class="stat-label">Administradores</div>
         </mat-card-content>
       </mat-card>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px;" *ngIf="!loading">
-      <mat-card style="border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);padding:16px;">
-        <mat-card-header><mat-card-title style="font-size:16px;font-weight:500;">Gimnasios Registrados</mat-card-title></mat-card-header>
-        <mat-card-content style="height:250px;">
+    <div class="dashboard-grid" *ngIf="!loading && !error">
+      <mat-card class="dashboard-card">
+        <mat-card-header><mat-card-title>Distribución de gimnasios</mat-card-title></mat-card-header>
+        <mat-card-content class="chart-wrap">
           <app-chart type="doughnut" [labels]="chartLabels" [datasets]="chartDatasets"></app-chart>
         </mat-card-content>
       </mat-card>
-      <mat-card style="border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);padding:16px;">
-        <mat-card-header><mat-card-title style="font-size:16px;font-weight:500;">Gimnasios</mat-card-title></mat-card-header>
+      <mat-card class="dashboard-card">
+        <mat-card-header><mat-card-title>Gimnasios registrados</mat-card-title></mat-card-header>
         <mat-card-content>
-          <table mat-table [dataSource]="gimnasios" style="width:100%;">
-            <ng-container matColumnDef="nombre"><th mat-header-cell *matHeaderCellDef>Nombre</th><td mat-cell *matCellDef="let g">{{ g.nombre }}</td></ng-container>
-            <ng-container matColumnDef="estado"><th mat-header-cell *matHeaderCellDef>Estado</th><td mat-cell *matCellDef="let g">{{ g.estado ? 'Activo' : 'Inactivo' }}</td></ng-container>
+          <table mat-table [dataSource]="gimnasios" class="recent-table">
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>Nombre</th>
+              <td mat-cell *matCellDef="let g">{{ g.nombre }}</td>
+            </ng-container>
+            <ng-container matColumnDef="estado">
+              <th mat-header-cell *matHeaderCellDef>Estado</th>
+              <td mat-cell *matCellDef="let g">{{ g.estado ? 'Activo' : 'Inactivo' }}</td>
+            </ng-container>
             <tr mat-header-row *matHeaderRowDef="['nombre','estado']"></tr>
             <tr mat-row *matRowDef="let row; columns: ['nombre','estado'];"></tr>
-            <tr *ngIf="gimnasios.length === 0"><td colspan="2" style="text-align:center;color:#94a3b8;padding:24px;">Sin gimnasios registrados</td></tr>
+            <tr *ngIf="gimnasios.length === 0">
+              <td colspan="2" class="empty-cell">Sin gimnasios registrados</td>
+            </tr>
           </table>
         </mat-card-content>
       </mat-card>
     </div>
   `,
   styles: [`
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-    @media (max-width: 768px) {
-      div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
-    }
+    .stat-primary { border-top: 4px solid var(--brand-primary); }
+    .stat-primary .stat-icon, .stat-primary .stat-value { color: var(--brand-primary); }
+    .stat-success { border-top: 4px solid var(--color-success); }
+    .stat-success .stat-icon, .stat-success .stat-value { color: var(--color-success); }
+    .stat-info { border-top: 4px solid var(--color-info); }
+    .stat-info .stat-icon, .stat-info .stat-value { color: var(--color-info); }
+    .chart-wrap { height: 260px; }
+    .recent-table { width: 100%; }
+    .empty-cell { text-align: center; color: var(--text-muted); padding: 24px !important; }
   `]
 })
 export class SuperAdminDashboardComponent implements OnInit {
@@ -80,7 +98,11 @@ export class SuperAdminDashboardComponent implements OnInit {
   loading = true;
   error = false;
   chartLabels: string[] = [];
-  chartDatasets: any[] = [{ label: 'Gimnasios', data: [] as number[], backgroundColor: ['#1a237e', '#3f51b5', '#7c4dff', '#7986cb', '#9fa8da'] }];
+  chartDatasets: any[] = [{
+    label: 'Gimnasios',
+    data: [] as number[],
+    backgroundColor: ['#1B5E20', '#2E7D32', '#43A047', '#66BB6A', '#FF6F00'],
+  }];
 
   constructor(
     private dashboardService: SuperAdminDashboardService,
@@ -93,7 +115,8 @@ export class SuperAdminDashboardComponent implements OnInit {
   }
 
   cargarStats(): void {
-    this.loading = true; this.error = false;
+    this.loading = true;
+    this.error = false;
     this.dashboardService.getStats().subscribe({
       next: (data: any) => { this.stats = data; this.loading = false; },
       error: () => { this.loading = false; this.error = true; },
@@ -108,7 +131,7 @@ export class SuperAdminDashboardComponent implements OnInit {
         this.chartDatasets = [{
           label: 'Gimnasios',
           data: data.map(() => 1),
-          backgroundColor: ['#1a237e', '#3f51b5', '#7c4dff', '#7986cb', '#9fa8da'],
+          backgroundColor: ['#1B5E20', '#2E7D32', '#43A047', '#66BB6A', '#FF6F00'],
         }];
       },
     });
